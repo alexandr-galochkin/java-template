@@ -2,7 +2,7 @@ package edu.spbu.matrix;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class MatrixTest
 {
@@ -14,8 +14,8 @@ public class MatrixTest
     Matrix m1 = new DenseMatrix("test.src\\m1.txt");
     Matrix e = new DenseMatrix("test.src\\e.txt");
     Matrix m3 = new DenseMatrix("test.src\\m3.txt");
-    assertEquals(false, m1.equals(e));
-    assertEquals(true, m1.equals(m3));
+    assertNotEquals(m1, e);
+    assertEquals(m1, m3);
   }
   @Test
   public void mulDD() {
@@ -24,14 +24,14 @@ public class MatrixTest
     Matrix m2 = new DenseMatrix("test.src\\m2.txt");
     Matrix expected = new DenseMatrix("test.src\\rezult.txt");
     assertEquals(expected, m1.mul(m2));
-    assertEquals(null, m2.mul(e));
+    assertNull(m2.mul(e));
   }
   @Test
   public void equalS(){
-      Matrix m1 = new SparseMatrix("test.src\\m1.txt");
-      Matrix e = new SparseMatrix("test.src\\e.txt");
-      Matrix m3 = new SparseMatrix("test.src\\m3.txt");
-      assertEquals(false, m1.equals(e));
-      assertEquals(true, m3.equals(m1));
+    Matrix m1 = new SparseMatrix("test.src\\m1.txt");
+    Matrix e = new SparseMatrix("test.src\\e.txt");
+    Matrix m3 = new SparseMatrix("test.src\\m3.txt");
+    assertNotEquals(m1, e);
+    assertEquals(m3, m1);
   }
 }
