@@ -10,7 +10,7 @@ public class MatrixTest
    * ожидается 4 таких теста
    */
   @Test
-  public void equal(){
+  public void equalD(){
     Matrix m1 = new DenseMatrix("test.src\\m1.txt");
     Matrix e = new DenseMatrix("test.src\\e.txt");
     Matrix m3 = new DenseMatrix("test.src\\m3.txt");
@@ -25,5 +25,13 @@ public class MatrixTest
     Matrix expected = new DenseMatrix("test.src\\rezult.txt");
     assertEquals(expected, m1.mul(m2));
     assertEquals(null, m2.mul(e));
+  }
+  @Test
+  public void equalS(){
+      Matrix m1 = new SparseMatrix("test.src\\m1.txt");
+      Matrix e = new SparseMatrix("test.src\\e.txt");
+      Matrix m3 = new SparseMatrix("test.src\\m3.txt");
+      assertEquals(false, m1.equals(e));
+      assertEquals(true, m3.equals(m1));
   }
 }
