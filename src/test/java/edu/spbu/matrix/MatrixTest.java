@@ -27,7 +27,7 @@ public class MatrixTest
     assertNull(m2.mul(e));
     Matrix n1 = new DenseMatrix("m1.txt");
     Matrix n2 = new DenseMatrix("m2.txt");
-    Matrix n3 = n1.mul(n2);
+    DenseMatrix rez =  (DenseMatrix) n1.mul(n2);
   }
   @Test
   public void mulSS() {
@@ -72,6 +72,7 @@ public class MatrixTest
     Matrix n1 = new DenseMatrix("m1.txt");
     Matrix n2 = new DenseMatrix("m2.txt");
     Matrix n3 = n1.dmul(n2);
+    //assertEquals(n3, n1.mul(n2));
   }
   @Test
   public void equalS(){

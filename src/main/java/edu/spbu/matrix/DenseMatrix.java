@@ -151,11 +151,12 @@ public class DenseMatrix implements Matrix
           DenseMatrix rez = new DenseMatrix(this.hight, ((DenseMatrix) o).length);
           DenseMatrix trans = ((DenseMatrix) o).transp();
           ArrayList<Thread> t = new ArrayList<>();
-          int ch = this.hight/2000 + 1;
+          int ch = this.hight/4 + 1;
           for (int i = 0; i < rez.hight; i+=ch) {
               Invest act = new Invest(i, ch, this, trans, rez);
-              t.add(new Thread(act));
-              t.get(i/ch).start();
+              Thread temp = new Thread(act);
+              t.add(temp);
+              temp.start();
           }
           for (Thread p: t) {
               try {
