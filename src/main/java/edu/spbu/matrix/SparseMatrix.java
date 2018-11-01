@@ -8,6 +8,39 @@ import java.util.*;
 /**
  * Разряженная матрица
  */
+class SInvest implements Runnable{
+
+    private int str, ch;
+    private Point key;
+    private SparseMatrix a, b, rez;
+    SInvest(int k, int l, SparseMatrix i, SparseMatrix j, SparseMatrix c){
+        rez = c;
+        str = k;
+        ch = l;
+        a = i;
+        b = j;
+    }
+    @Override
+    public void run() {
+        for (Point key: a.val.keySet()) {
+            for (int i = str; i < str + ch; i++) {
+                if (i < b.length) {
+                    Point p = new Point(key.y, i);
+                    if (b.val.containsKey(p)) {
+                        Point q = new Point(key.x, p.y);
+                        if (rez.val.containsKey(q)) {
+                            double t = rez.val.get(q) + a.val.get(key) * b.val.get(p);
+                            rez.val.put(q, t);
+                        } else {
+                            double t = a.val.get(key) * b.val.get(p);
+                            rez.val.put(q, t);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 public class SparseMatrix implements Matrix {
   int length, hight;
   Map<Point, Double> val;
@@ -143,6 +176,51 @@ public class SparseMatrix implements Matrix {
    */
   @Override
   public Matrix dmul(Matrix o) {
+      if (o instanceof SparseMatrix) {
+          if (length != ((SparseMatrix) o).hight) {
+              return (null);
+          }
+          SparseMatrix rez = new SparseMatrix(((SparseMatrix) o).length, hight);
+          ArrayList<Thread> t = new ArrayList<>();
+          ArrayList<SparseMatrix> R = new ArrayList<>();
+          int ch = ((SparseMatrix) o).length / 4 + 1;
+          for (int i = 0; i < ((SparseMatrix) o).length; i += ch) {
+              SparseMatrix Re = new SparseMatrix(((SparseMatrix) o).length, hight);
+              R.add(Re);
+              SInvest act = new SInvest(i, ch, this, (SparseMatrix) o, Re);
+              Thread temp = new Thread(act);
+              t.add(temp);
+              temp.start();
+          }
+          for (Thread p : t) {
+              try {
+                  p.join();
+              } catch (InterruptedException e) {
+                  e.printStackTrace();
+              }
+          }
+          for (SparseMatrix r: R) {
+              for (Point key : r.val.keySet()) {
+                  if (rez.val.containsKey(key))
+                  {
+                      double tem = rez.val.get(key) + r.val.get(key);
+                      if (Math.abs(tem) < 1.0E-06)
+                      {
+                          rez.val.remove(key);
+                      } else {
+                          rez.val.put(key, tem);
+                      }
+                  } else {
+                      if (Math.abs(r.val.get(key)) >= 1.0E-06)
+                      {
+                          rez.val.put(key, r.val.get(key));
+                      }
+                  }
+              }
+          }
+          rez.val.entrySet().removeIf(entry -> Math.abs(entry.getValue()) < 1.0E-06);
+          return rez;
+      }
     return null;
   }
 

@@ -75,6 +75,19 @@ public class MatrixTest
     //assertEquals(n3, n1.mul(n2));
   }
   @Test
+  public void dmulSS() {
+    Matrix m1 = new SparseMatrix("test.src\\m1.txt");
+    Matrix e = new SparseMatrix("test.src\\e.txt");
+    Matrix m2 = new SparseMatrix("test.src\\m2.txt");
+    Matrix expected = new SparseMatrix("test.src\\rezult.txt");
+    assertEquals(expected, m1.dmul(m2));
+    assertNull(m2.dmul(e));
+    Matrix n1 = new SparseMatrix("m1.txt");
+    Matrix n2 = new SparseMatrix("m2.txt");
+    Matrix n3 = n1.dmul(n2);
+    //assertEquals(n3, n1.mul(n2));
+  }
+  @Test
   public void equalS(){
     Matrix m1 = new SparseMatrix("test.src\\m1.txt");
     Matrix e = new SparseMatrix("test.src\\e.txt");
